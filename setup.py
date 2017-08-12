@@ -11,7 +11,9 @@ setup(
     url='https://github.com/adamchainz/flake99',
     py_modules=[],
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        'redbaron',
+    ],
     license='ISC License',
     zip_safe=False,
 )
