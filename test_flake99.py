@@ -22,3 +22,13 @@ def test_trailing_spaces_comment_removed():
 
 def test_trailing_tabs_comment_removed():
     assert do_fixes('1  # a\t\n') == '1  # a\n'
+
+
+def test_trailing_blank_lines_removed():
+    # W391
+    assert do_fixes('1\n\n') == '1\n'
+
+
+def test_trailing_blank_line_added():
+    # W391
+    assert do_fixes('1') == '1\n'

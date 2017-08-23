@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import sys
 
 from redbaron import RedBaron
+from redbaron.nodes import EndlNode
 
 
 def main():
@@ -24,6 +25,7 @@ def fix_file(filename):
 def do_fixes(code_str):
     baron = RedBaron(code_str)
     fix_trailing_whitespace(baron)
+    fix_trailing_blank_lines(baron)
     return baron.dumps()
 
 
@@ -38,6 +40,15 @@ def fix_trailing_whitespace(baron):
     # parsed into the comment, so remove it
     for comment in baron.find_all('CommentNode'):
         comment.value = comment.value.rstrip(' \t\v')
+
+
+def fix_trailing_blank_lines(baron):
+    if not isinstance(baron.node_list[-1], EndlNode):
+        endl = RedBaron('\n').node_list[0]
+        baron.node_list.append(endl)
+
+    while isinstance(baron.node_list[-2], EndlNode):
+        del baron.node_list[-2]
 
 
 if __name__ == '__main__':
