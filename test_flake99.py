@@ -25,10 +25,12 @@ def test_trailing_tabs_comment_removed():
 
 
 def test_trailing_blank_lines_removed():
-    # W391
     assert do_fixes('1\n\n') == '1\n'
 
 
 def test_trailing_blank_line_added():
-    # W391
     assert do_fixes('1') == '1\n'
+
+
+def test_trailing_blank_line_not_unnecessarily_added():
+    assert do_fixes('if 1:    1\n') == 'if 1:    1\n'
