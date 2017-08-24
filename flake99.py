@@ -43,12 +43,24 @@ def fix_trailing_whitespace(baron):
 
 
 def fix_trailing_blank_lines(baron):
-    if not isinstance(baron.node_list[-1], EndlNode):
+    last = last_node(baron)
+    if not isinstance(last, EndlNode):
         endl = RedBaron('\n').node_list[0]
-        baron.node_list.append(endl)
+        last.insert_after(endl)
 
-    while isinstance(baron.node_list[-2], EndlNode):
-        del baron.node_list[-2]
+    last_block = last_node(baron).parent
+    while len(last_block.node_list) > 2 and isinstance(last_block.node_list[-2], EndlNode):
+        del last_block.node_list[-2]
+
+
+def last_node(baron):
+    last_line = max(baron.bounding_box.bottom_right.line, 2) - 1  # The max is to deal with an off-by-one error
+    last = baron.at(last_line)
+    while True:
+        next_ = last.next
+        if next_ is None:
+            return last
+        last = next_
 
 
 if __name__ == '__main__':
